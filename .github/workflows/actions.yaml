@@ -1,45 +1,42 @@
-name: GitHub Actions
+name: Deploy Astro to GitHub Pages
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
+  # デプロイ用は Node 20 のみでビルド
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 18
-          - 20
-          - 22
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: echo > dist/.nojekyll   # これで確実に入る
+      - run: echo > dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
-      # - run: npm test
 
-  check:
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run check
+      - id: deployment
+        uses: actions/deploy-pages@v4

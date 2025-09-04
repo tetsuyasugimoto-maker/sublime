@@ -23,7 +23,8 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 
 export default defineConfig({
   output: 'static',
-
+  site: 'https://tetsuyasugimoto-maker.github.io',
+  base: '/sublime/',
   integrations: [
     tailwind({
       applyBaseStyles: false,
@@ -87,6 +88,4 @@ export default defineConfig({
       },
     },
   },
-  site: 'https://tetsuyasugimoto-maker.github.io',
-  base: '/sublime/',
 });

@@ -87,4 +87,6 @@ export default defineConfig({
       },
     },
   },
+  site: 'https://tetsuyasugimoto-maker.github.io',
+  base: '/sublime/',
 });

@@ -10,7 +10,6 @@ import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import compress from 'astro-compress';
 import type { AstroIntegration } from 'astro';
-import { defineConfig } from 'astro/config'
 
 import astrowind from './vendor/integration';
 
@@ -83,6 +82,7 @@ export default defineConfig({
   },
 
   vite: {
+    base: '/sublime',
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './src'),

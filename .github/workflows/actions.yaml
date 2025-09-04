@@ -26,6 +26,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - run: echo > dist/.nojekyll   # これで確実に入る
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
       # - run: npm test
 
   check:
